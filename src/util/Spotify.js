@@ -1,6 +1,6 @@
 const clientId = 'b7f8c18441b8453f97b66ef6ce97f5ce';
 const redirectUri = 'http://localhost:3000/';
-const spotifyUrl = 'https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectUri}';
+const spotifyUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectUri}`;
 
 let accessToken;
 let expiresIn;
@@ -24,8 +24,8 @@ let Spotify = {
 
   search(term){
     const accessToken = Spotify.getAccessToken();
-    const headers = {Authorization: 'Bearer ${accessToken'};
-    return fetch('https://api.spotify.com/v1/search?type=track&q=${term}', {headers: headers}).then(response => {
+    const headers = {Authorization: `Bearer ${accessToken}`};
+    return fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, {headers: headers}).then(response => {
       if(response.ok){
         return response.json();
       }
@@ -41,7 +41,55 @@ let Spotify = {
         uri: track.uri
       }))
     })
+  },
+
+  savePlaylist(playlistName, trackURIs){
+    if(!playlistName && !trackURIs){
+      return;
+    }
+    
+    const accessToken = Spotify.getAccessToken();
+    const headers = { Authorization: `Bearer ${accessToken}`};
+    let userId;
+
+    return fetch('https://api.spotify.com/v1/me', {headers: headers}).then(response => response.json().then(jsonResponse =>{
+      userId = jsonResponse.id;
+      return fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
+        header: headers,
+        method: 'POST',
+        body: JSON.stringify({name: playlistName})
+      }).then(response => response.json().then(jsonResponse =>{
+        const playlistID = jsonResponse.id;
+        return fetch(`https://api.spotify.com/v1/users/${userId}/playlists/${playlistID}/tracks`), {
+          header: headers,
+          method: 'POST',
+          body: JSON.stringify({uris: trackURIs})
+        }
+      }));
+    }));    
   }
+
 };
 
 export default Spotify;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
