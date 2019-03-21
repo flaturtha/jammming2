@@ -5,14 +5,17 @@ class SearchBar extends React.Component{
 
   constructor(props){
     super(props);
+
+    this.state = {
+      term: ''
+    }
     
     this.search = this.search.bind(this);
     this.handleTermChange = this.handleTermChange.bind(this);
   }
   
-  // issues here --- task#69
   search(term){
-    this.props.onSearch(term);
+    this.props.onSearch(this.state.term);
   }
 
   handleTermChange(event){
