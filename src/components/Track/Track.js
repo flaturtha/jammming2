@@ -11,6 +11,7 @@ class Track extends React.Component{
   }
 
   renderAction(isRemoval){
+    // eslint-disable-next-line
     return (isRemoval ? <a className="Track-action" onClick={this.removeTrack}>-</a> : <a className="Track-action" onClick={this.addTrack}>+</a>);
   }
 

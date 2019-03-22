@@ -8,7 +8,7 @@ class SearchBar extends React.Component{
 
     this.state = {
       term: ''
-    }
+    };
     
     this.search = this.search.bind(this);
     this.handleTermChange = this.handleTermChange.bind(this);
@@ -26,6 +26,7 @@ class SearchBar extends React.Component{
     return(
       <div className="SearchBar">
         <input placeholder="Enter a Song, Album, or Artist" onChange={this.handleTermChange} />
+        {/* eslint-disable-next-line */}
         <a onClick={this.search}>SEARCH</a>
       </div>
     )
