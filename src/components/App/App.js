@@ -24,36 +24,50 @@ class App extends Component {
   addTrack(track){
     if(this.state.playlistTracks.find(savedTrack => savedTrack.id === track.id)){
       return
+    } else {
+      let tracks = this.state.playlistTracks;
+      tracks.push(tracks);
+      this.setState({
+        playlistTracks: tracks
+      });
     }
   }
 
   removeTrack(track){
-    this.setState({playlistTracks: this.state.playlistTracks.splice(track.id, 1)}); /* from task#49 */
+    let tracks = this.state.playlistTracks;
+
+    tracks = tracks.filter(function(item){
+      return (item.id !== track.id);
+    });
+
+    this.setState({
+      playlistTracks: tracks
+    });
   }
 
   updatePlaylistName(name){
+    console.log(name);
     this.setState({playlistName: name});
   }
 
   savePlaylist(){
-    const trackURIs = this.state.playlistTracks.map(playlistTrack => playlistTrack.uri);
+    const trackURIs = this.state.playlistTracks.map(track => track.uri);
+
     Spotify.savePlaylist(this.state.playlistName, trackURIs).then(() =>{
       this.setState(
         {
           playlistName: 'New Playlist',
           playlistTracks: []
-        }
-
-      )
-    })
+        });
+    });
   }
 
   search(term){
     console.log(`You searched for ${term}`);
-    Spotify.search(term).then(tracks =>{
+    Spotify.search(term).then(searchResults =>{
       this.setState({
-        searchResults: tracks
-      })
+        searchResults: searchResults
+      });
     });
   }
 
