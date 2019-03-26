@@ -24,6 +24,7 @@ const Spotify = {
   //   }
   // },
 
+  // BELOW COPIED FROM SLACK COMMENT PER MODERATOR
   getAccessToken() {
     if(accessToken)
       return accessToken;
