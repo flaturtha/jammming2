@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Spotify from '../../util/Spotify';
 import './App.css';
 import Playlist from '../Playlist/Playlist';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
 
-class App extends Component {
+class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
@@ -26,7 +26,7 @@ class App extends Component {
       return
     } else {
       let tracks = this.state.playlistTracks;
-      tracks.push(tracks);
+      tracks.push(track);
       this.setState({
         playlistTracks: tracks
       });
@@ -47,11 +47,15 @@ class App extends Component {
 
   updatePlaylistName(name){
     console.log(name);
-    this.setState({playlistName: name});
+    this.setState({
+      playlistName: name
+    });
   }
 
   savePlaylist(){
-    const trackURIs = this.state.playlistTracks.map(track => track.uri);
+    const trackURIs = this.state.playlistTracks.map(function(track){
+      return track.uri;
+    });
 
     Spotify.savePlaylist(this.state.playlistName, trackURIs).then(() =>{
       this.setState(
@@ -78,8 +82,15 @@ class App extends Component {
         <div className="App">
           <SearchBar onSearch={this.search} />
           <div className="App-playlist">
-            <SearchResults searchResults={this.state.searchResults} onAdd={this.addTrack}/>
-            <Playlist playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks} onRemove={this.removeTrack} onNameChange={this.updatePlaylistName} onSave={this.savePlaylist} />
+            <SearchResults
+              searchResults={this.state.searchResults}
+              onAdd={this.addTrack}/>
+            <Playlist
+              playlistName={this.state.playlistName}
+              playlistTracks={this.state.playlistTracks}
+              onRemove={this.removeTrack}
+              onNameChange={this.updatePlaylistName}
+              onSave={this.savePlaylist} />
           </div>
         </div>
       </div>
